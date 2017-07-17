@@ -57,6 +57,10 @@ GEM
       safe_yaml (~> 1.0.0)
     debug_inspector (0.0.3)
     docile (1.1.5)
+    dotenv (2.2.1)
+    dotenv-rails (2.2.1)
+      dotenv (= 2.2.1)
+      railties (>= 3.2, < 5.2)
     erubis (2.7.0)
     ffi (1.9.18)
     globalid (0.4.0)
@@ -179,6 +183,7 @@ DEPENDENCIES
   better_errors
   binding_of_caller
   byebug
+  dotenv-rails
   httparty
   listen (~> 3.0.5)
   minitest-rails
