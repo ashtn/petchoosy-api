@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  user: one
+  api_id: 1
+  fav: false
+  score: 1
+
+two:
+  user: two
+  api_id: 1
+  fav: false
+  score: 1
