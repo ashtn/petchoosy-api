@@ -10,23 +10,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170718053405) do
+ActiveRecord::Schema.define(version: 20170718212946) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
-
-  create_table "pet_list_interests", force: :cascade do |t|
-    t.integer  "user_id"
-    t.string   "animal"
-    t.string   "breed"
-    t.string   "size"
-    t.string   "sex"
-    t.integer  "location"
-    t.string   "age"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["user_id"], name: "index_pet_list_interests_on_user_id", using: :btree
-  end
 
   create_table "pet_lists", force: :cascade do |t|
     t.integer  "user_group_id"
@@ -68,7 +55,6 @@ ActiveRecord::Schema.define(version: 20170718053405) do
     t.datetime "updated_at", null: false
   end
 
-  add_foreign_key "pet_list_interests", "users"
   add_foreign_key "pet_lists", "user_groups"
   add_foreign_key "pets", "users"
 end
