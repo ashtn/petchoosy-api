@@ -9,11 +9,13 @@ class PetListController < ApplicationController
     petlist = PetList.new(user_group_id: user_group.id)
     petlist.save
 
+    puts 'petlist.id ===================================='
+    puts petlist.id
     # create new pet instance with user_id, api_id, fav: true/false, score
     pets = Pet.add_pets(@user.id, params[:pets], petlist.id)
-
     # loop over array of pets
       pets.each do |pet|
+        byebug
         puts 'pet ==============================================='
         ap pet
         puts 'pet.class ========================================='
@@ -27,7 +29,6 @@ class PetListController < ApplicationController
         petlist.pets << pet if pet.class == Pet
       end
       ap petlist.pets
-      byebug
     if petlist.pets #user_group must exist
       render status: :ok, json: { pets: pets }
     else

@@ -1,6 +1,6 @@
 class Pet < ApplicationRecord
-  has_and_belongs_to_many :users
-  has_and_belongs_to_many :pet_lists
+  belongs_to :user
+  belongs_to :pet_list
 
   def self.add_pets(user_id, pets, petlist_id)
     new_pets = []
