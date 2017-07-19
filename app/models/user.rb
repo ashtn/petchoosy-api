@@ -1,4 +1,6 @@
 class User < ApplicationRecord
-  has_and_belongs_to_many :user_groups
-  has_many :pets, :through => :pet_lists
+  has_many :pets
+  # belongs_to :pet_list
+  has_and_belongs_to_many :pet_lists
+  # has_many :pet_lists, :through => :pets
 end

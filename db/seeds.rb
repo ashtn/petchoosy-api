@@ -14,7 +14,3 @@ user2 = User.create(
 name: 'Jhene',
 email: 'jhene@test.com'
 )
-
-group = UserGroup.create(
-name: 'Sir Blue Rumi'
-)
