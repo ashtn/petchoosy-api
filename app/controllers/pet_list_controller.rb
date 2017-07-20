@@ -3,36 +3,32 @@ class PetListController < ApplicationController
   # postdata = pets: { {000000: {fav: true}}}
   def create
 
-    user_group = UserGroup.new
-    user_group.save
+    # Create PetList instance
+    petlist = PetList.new(title: params[:title])
 
-    petlist = PetList.new(user_group_id: user_group.id)
-    petlist.save
 
-    puts 'petlist.id ===================================='
-    puts petlist.id
-    # create new pet instance with user_id, api_id, fav: true/false, score
-    pets = Pet.add_pets(@user.id, params[:pets], petlist.id)
-    # loop over array of pets
+    if petlist.save
+
+      # add user to petlist
+      petlist.users << @user
+
+      pets = params[:pets]
+
+      # loop over array of pets
       pets.each do |pet|
-        byebug
-        puts 'pet ==============================================='
-        ap pet
-        puts 'pet.class ========================================='
-        puts pet.class
-        ## check if pet already exists in petlist
-        ## add fav and score to pet list?
-        # puts '=================================================='
-        # puts pet.class
-        # byebug
-        # add pets method in petlistpets join table, accepts and array of pet objects
-        petlist.pets << pet if pet.class == Pet
+        # create new pet instance
+        existing_pet = Pet.construct(pet[:pet_id])
+
+        #create new pet_lists_pet
+        PetListsPet.construct(petlist.id, existing_pet.id) # add 3rd param pet[:fav] ?
       end
-      ap petlist.pets
-    if petlist.pets #user_group must exist
-      render status: :ok, json: { pets: pets }
+    end
+
+    if petlist.pet_lists_pet.length == pets.length
+      # what info to send back
+      render status: :ok, json: { pets: pets, petListId: petlist.id }
     else
-      render status: :bad_request, json: { errors: petlist.errors.messages }
+      render status: :bad_request, json: { errors: petlist.errors.messages, other_errors: "\nOnly able to create #{petlist.pet_lists_pet.length}/#{pets.length} pets" }
     end
   end
 

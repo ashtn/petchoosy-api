@@ -14,3 +14,11 @@ user2 = User.create(
 name: 'Jhene',
 email: 'jhene@test.com'
 )
+
+petlist = PetList.create(
+title: 'Tic Tac'
+)
+
+pet1 = Pet.create(api_id: 38653688)
+
+pet2 = Pet.create(api_id: 36955316)
