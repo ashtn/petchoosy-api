@@ -23,7 +23,7 @@ class PetListController < ApplicationController
         # puts '=================================================='
         # puts pet.class
         # byebug
-        # add pets method in petlistpets join table, accepts and array of pet objects
+        # add pets method in PetListsPets join table, accepts and array of pet objects
         petlist.pets << pet if pet.class == Pet
       end
       ap petlist.pets

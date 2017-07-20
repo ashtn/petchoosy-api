@@ -10,42 +10,44 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170718212946) do
+ActiveRecord::Schema.define(version: 20170720082445) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "pet_lists", force: :cascade do |t|
-    t.integer  "user_group_id"
-    t.datetime "created_at",    null: false
-    t.datetime "updated_at",    null: false
-    t.index ["user_group_id"], name: "index_pet_lists_on_user_group_id", using: :btree
+    t.string   "title"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
-  create_table "pet_lists_pets", id: false, force: :cascade do |t|
-    t.integer "pet_id"
-    t.integer "pet_list_id"
+  create_table "pet_lists_pets", force: :cascade do |t|
+    t.integer  "score"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+    t.integer  "pet_id"
+    t.integer  "pet_list_id"
+    t.index ["pet_id"], name: "index_pet_lists_pets_on_pet_id", using: :btree
+    t.index ["pet_list_id"], name: "index_pet_lists_pets_on_pet_list_id", using: :btree
+  end
+
+  create_table "pet_lists_pets_pets", id: false, force: :cascade do |t|
+    t.integer "pet_lists_pet_id", null: false
+    t.integer "pet_id",           null: false
+  end
+
+  create_table "pet_lists_users", id: false, force: :cascade do |t|
+    t.integer "pet_list_id", null: false
+    t.integer "user_id",     null: false
+    t.index ["pet_list_id", "user_id"], name: "index_pet_lists_users_on_pet_list_id_and_user_id", using: :btree
   end
 
   create_table "pets", force: :cascade do |t|
-    t.integer  "user_id"
     t.integer  "api_id"
     t.boolean  "fav"
     t.integer  "score"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["user_id"], name: "index_pets_on_user_id", using: :btree
-  end
-
-  create_table "user_groups", force: :cascade do |t|
-    t.string   "name"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
-  create_table "user_groups_users", id: false, force: :cascade do |t|
-    t.integer "user_group_id"
-    t.integer "user_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -55,6 +57,6 @@ ActiveRecord::Schema.define(version: 20170718212946) do
     t.datetime "updated_at", null: false
   end
 
-  add_foreign_key "pet_lists", "user_groups"
-  add_foreign_key "pets", "users"
+  add_foreign_key "pet_lists_pets", "pet_lists"
+  add_foreign_key "pet_lists_pets", "pets"
 end

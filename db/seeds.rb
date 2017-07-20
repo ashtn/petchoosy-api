@@ -15,6 +15,10 @@ name: 'Jhene',
 email: 'jhene@test.com'
 )
 
-group = UserGroup.create(
-name: 'Sir Blue Rumi'
+petlist = PetList.create(
+title: 'Tic Tac'
 )
+
+pet1 = Pet.create(api_id: 38653688)
+
+pet2 = Pet.create(api_id: 36955316)
