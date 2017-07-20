@@ -3,10 +3,8 @@ class PetListController < ApplicationController
   # postdata = pets: { {000000: {fav: true}}}
   def create
 
-    user_group = UserGroup.new
-    user_group.save
 
-    petlist = PetList.new(user_group_id: user_group.id)
+    petlist = PetList.new(title: params[:title])
     petlist.save
 
     # create new pet instance with user_id, api_id, fav: true/false, score

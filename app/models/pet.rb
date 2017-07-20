@@ -5,9 +5,13 @@ class Pet < ApplicationRecord
   def self.add_pets(user_id, pets, petlist_id)
     new_pets = []
     pets.each do |pet|
-      # byebug
-      #if pet is not saved
-      # if self.is_saved(user_id, pet[:pet_id].to_i, petlist_id).length === 0
+      existing_pet = self.find_pet(pet[:pet_id].to_i)
+      # if pet exists
+      if existing_pet
+        # add pet to array
+        new_pets << existing_pet
+        #if pet does not exist
+      else
         #create a new pet
         new_pet = Pet.create(
         user_id: user_id,
@@ -17,23 +21,15 @@ class Pet < ApplicationRecord
         )
         # add pet to array
         new_pets << new_pet
-        # else
-        #   self.is_saved
       end
-      return new_pets
-      # create new pet object
-      # pet = Pet.create(new_pet)
-      # add pet to petlist pets join table
-      # self.pets << pet
-    # end
+    end
+    return new_pets
   end
 
   private
 
-  def self.is_saved(user_id, api_id)
-    return Pet.where(user_id: user_id, api_id: api_id)
-    # byebug
-    # Pet.exists?(user_id: user_id, api_id: api_id)
+  def self.find_pet(api_id)
+    return Pet.find_by(api_id: api_id)
   end
 
 end
