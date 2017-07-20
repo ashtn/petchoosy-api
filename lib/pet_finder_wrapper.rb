@@ -20,8 +20,8 @@ class PetFinderWrapper
     if response['petfinder']['pets'] == 0
       return []
     else
-      pets = response['petfinder']['pets']['pet'].map do | animal |
-        self.construct_pet(animal)
+      pets = response['petfinder']['pets']['pet'].map do | pet |
+        self.construct_pet(pet)
       end
     end
     return pets
@@ -33,21 +33,45 @@ class PetFinderWrapper
     puts url
   end # will need to make api call to find breeds to display them
 
+  def self.get_pet(api_id)
+    method = "pet.get?key="
+
+    query = "id=#{api_id}"
+
+    url = "#{BASE_URL}#{method}#{KEY}#{STATIC_ARGS}&#{query}"
+    puts 'url =============================='
+    puts url
+
+    response = HTTParty.get(url)
+    puts 'response ========================'
+    ap response
+
+    pet = response['petfinder']['pet']
+    puts 'pet ============================='
+    ap pet
+    # TODO add fav:
+    # TODO what happens if pet does not exist? #Let user know pet has be adopted
+    if pet
+      return construct_pet(pet)
+    end
+  end
+
   private
 
-  def self.construct_pet(animal)
+  def self.construct_pet(pet)
 
     return {
-      api_id: animal['id']['$t'],
-      name: animal['name']['$t'],
-      media: animal['media'], # TODO only grab size X
-      description: animal['description']['$t'],
-      age: animal['age']['$t'],
-      # lastUpdate: animal['lastUpdate']['$t'],
-      city: animal['contact']['city']['$t'],
-      sex: animal['sex']['$t'],
-      breed: animal['breeds']['breed'],
-      shelterId: animal['shelterId']['$t'] } # TODO get_shelter()
+      api_id: pet['id']['$t'], #999
+      name: pet['name']['$t'], #999
+      media: pet['media'], # TODO only grab size X #999
+      description: pet['description']['$t'], #999
+      age: pet['age']['$t'], #999
+      # lastUpdate: pet['lastUpdate']['$t'],
+      # city: pet['contact']['city']['$t'],
+      sex: pet['sex']['$t'], #999
+      breed: pet['breeds']['breed'], # TODO make array of breeds #999
+      # shelterId: pet['shelterId']['$t']
+    } # TODO get_shelter()
   end
 
 end

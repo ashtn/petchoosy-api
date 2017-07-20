@@ -1,5 +1,6 @@
 class PetListController < ApplicationController
-  before_action :require_user, only: [:create, :destroy]
+  before_action :require_user, only: [:edit, :create, :destroy]
+  before_action :require_pet_list, only: [:show, :destroy]
   # postdata = pets: { {000000: {fav: true}}}
   def create
 
@@ -32,10 +33,29 @@ class PetListController < ApplicationController
     end
   end
 
+  def show
+    pets = PetList.get_pets(@pet_list)
+    if pets
+      render status: :ok, json: {
+        pets: pets
+      }
+    else
+      render status: :bad_request, json: {
+        errors: @pet_list.errors.messages
+      }
+    end
+  end
+
+private
   def require_user
     @user = User.find_by id: params[:user_id]
     unless @user
       render status: :not_found, json: { errors: { user_id: ["No such user #{params[:user_id]}"] } }
     end
   end
+
+  def require_pet_list
+    @pet_list = PetList.find(params[:id])
+  end
+
 end
