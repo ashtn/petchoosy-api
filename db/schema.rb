@@ -31,11 +31,6 @@ ActiveRecord::Schema.define(version: 20170721201910) do
     t.index ["pet_list_id"], name: "index_pet_lists_pets_on_pet_list_id", using: :btree
   end
 
-  create_table "pet_lists_pets_pets", id: false, force: :cascade do |t|
-    t.integer "pet_lists_pet_id", null: false
-    t.integer "pet_id",           null: false
-  end
-
   create_table "pet_lists_users", id: false, force: :cascade do |t|
     t.integer "pet_list_id", null: false
     t.integer "user_id",     null: false
