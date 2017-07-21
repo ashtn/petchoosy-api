@@ -53,6 +53,8 @@ class PetFinderWrapper
     # TODO what happens if pet does not exist? #Let user know pet has be adopted
     if pet
       return construct_pet(pet)
+    else
+      return {api_id: api_id, removed: true}
     end
   end
 
@@ -61,15 +63,15 @@ class PetFinderWrapper
   def self.construct_pet(pet)
 
     return {
-      api_id: pet['id']['$t'], #999
-      name: pet['name']['$t'], #999
-      media: pet['media'], # TODO only grab size X #999
-      description: pet['description']['$t'], #999
-      age: pet['age']['$t'], #999
+      api_id: pet['id']['$t'],
+      name: pet['name']['$t'],
+      media: pet['media'], # TODO only grab size X
+      description: pet['description']['$t'],
+      age: pet['age']['$t'],
       # lastUpdate: pet['lastUpdate']['$t'],
       # city: pet['contact']['city']['$t'],
-      sex: pet['sex']['$t'], #999
-      breed: pet['breeds']['breed'], # TODO make array of breeds #999
+      sex: pet['sex']['$t'],
+      breed: pet['breeds']['breed'], # TODO make array of breeds
       # shelterId: pet['shelterId']['$t']
     } # TODO get_shelter()
   end

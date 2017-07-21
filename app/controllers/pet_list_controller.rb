@@ -1,40 +1,38 @@
 class PetListController < ApplicationController
   before_action :require_user, only: [:edit, :create, :destroy]
-  before_action :require_pet_list, only: [:show, :destroy]
-  # postdata = pets: { {000000: {fav: true}}}
+  before_action :require_pet_list, only: [:show, :destroy, :update]
+
   def create
 
-    # Create PetList instance
-    petlist = PetList.new(title: params[:title])
+    # Create pet_list instance
+    pet_list = PetList.new(title: params[:title])
 
+    if pet_list.save
 
-    if petlist.save
-
-      # add user to petlist
-      petlist.users << @user
+      # add user to pet_list
+      pet_list.users << @user
 
       pets = params[:pets]
 
       # loop over array of pets
       pets.each do |pet|
         # create new pet instance
-        existing_pet = Pet.construct(pet[:pet_id])
+        existing_pet = PetList.get_pet(pet[:pet_id])
 
-        #create new pet_lists_pet
-        PetListsPet.construct(petlist.id, existing_pet.id) # add 3rd param pet[:fav] ?
+        PetList.construct_pet_list_pet(pet_list.id, existing_pet.id)  # add 3rd param pet[:fav] ?
       end
     end
 
-    if petlist.pet_lists_pet.length == pets.length
-      # what info to send back
-      render status: :ok, json: { pets: pets, petListId: petlist.id }
+    if pet_list.pet_lists_pet.length == pets.length
+      # TODO what info to send back
+      render status: :ok, json: { pets: pets, pet_listId: pet_list.id }
     else
-      render status: :bad_request, json: { errors: petlist.errors.messages, other_errors: "\nOnly able to create #{petlist.pet_lists_pet.length}/#{pets.length} pets" }
+      render status: :bad_request, json: { errors: pet_list.errors.messages, other_errors: "\nOnly able to create #{pet_list.pet_lists_pet.length}/#{pets.length} pets" }
     end
   end
 
   def show
-    pets = PetList.get_pets(@pet_list)
+    pets = PetList.get_pets_data(@pet_list)
     if pets
       render status: :ok, json: {
         pets: pets
@@ -43,6 +41,33 @@ class PetListController < ApplicationController
       render status: :bad_request, json: {
         errors: @pet_list.errors.messages
       }
+    end
+  end
+
+  def update
+
+    pets = params[:pets]
+
+    pets.each_with_index do |pet, index|
+
+      existing_pet = PetList.get_pet(pet[:pet_id])
+
+      if existing_pet
+        existing_pet_lists_pet = PetList.get_pet_lists_pet(@pet_list.id, existing_pet.id)
+
+        if !existing_pet_lists_pet
+
+          PetList.construct_pet_list_pet(@pet_list.id, existing_pet.id)
+        end
+      end
+    end
+
+    if pets.length == @pet_list.pet_lists_pet.length
+
+      render status: :ok, json: {message: "#{pets.length} sent : #{@pet_list.pet_lists_pet.length} pets saved"}
+
+    else
+      render status: :bad_request, json: { errors: @pet_list.errors.messages, other_errors: "\n#{pets.length} sent : #{@pet_list.pet_lists_pet.length} pets saved" }
     end
   end
 
