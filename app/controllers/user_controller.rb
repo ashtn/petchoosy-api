@@ -1,7 +1,8 @@
 class UserController < ApplicationController
   def login
-    user = User.find_by(email: params[:email])
 
+    user = User.find_by(email: params[:formData][:email])
+    
     if user
       render status: :ok, json: {user_id: user.id}
     else
